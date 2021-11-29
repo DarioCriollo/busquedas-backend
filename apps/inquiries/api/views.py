@@ -14,7 +14,7 @@ class ListInquiriesApiView(APIView):
         word = Inquiries.objects.filter(word=request.data['word'])
         if word:
             wordf = Inquiries.objects.get(word=request.data['word']) 
-            word.update(number_searches= wordf.number_searches + 10 ,number_results = wordf.number_results + 1 )
+            word.update(number_searches= wordf.number_searches + 5)
             return Response({'data': 'Si existe actualizando'})
             
         else:
