@@ -11,11 +11,20 @@ class ListInquiriesApiView(APIView):
         return Response(inquiries_json.data)
 
     def post(self, request):
-        inquiries_json = InquiriesSerializers(data=request.data)
-        if inquiries_json.is_valid():
-            inquiries_json.save()
-            return Response(inquiries_json.data, status=201)
-        return Response(inquiries_json.data, status=400)
+        word = Inquiries.objects.filter(word=request.data['word'])
+        if word:
+            wordf = Inquiries.objects.get(word=request.data['word']) 
+            word.update(number_searches= wordf.number_searches + 10 ,number_results = wordf.number_results + 1 )
+            return Response({'data': 'Si existe actualizando'})
+            
+        else:
+            inquiries_json = InquiriesSerializers(data=request.data)
+            if inquiries_json.is_valid():
+                inquiries_json.save()
+                return Response(inquiries_json.data, status=201)
+            return Response(inquiries_json.data, status=400)
+
+       
 
 class DetailInquiriesApiView(APIView):
     def get_object(self, pk):
